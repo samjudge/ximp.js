@@ -1,5 +1,5 @@
 # ximp.js
-Ximp.js (eXplicitly IMPerative) is a small tool used to implement logical control in your HTML tags through ximp's custom attributes. It is specifically targetted for newer developers so I can get them into bad habits early (jk).
+Ximp.js (eXplicitly IMPerative) is a small tool used to implement logical control in your HTML tags through ximp's custom attributes. It is specifically targetted for newer developers so I can get them into bad habits early (jk). It's porbably a bit (very) buggy, so make an issue (or even a test case) if you find anything!
 
 Using ximp.js means you don't need the boilerplate you would normally need to use in javascript in order to implement logical control over your HTML, or when using javascript to add dynamic control over your page would be impractical, or when you would use ajax to update what would otherwise be static assets. While I'm a huge fan of both vuejs and angular, which offer directives, sometimes a website is still just a website, not an SPA or something that requires two-way binding and a controller. Ximp.js is about getting a lot of things done on the front end, fast.
 
@@ -42,5 +42,21 @@ Where `T` represents either a literal value OR is a token speicifying the id and
 In the cases where no relational connective (`EQ`,`NE`,`LT`,`GT`) is provided, it is assumed the value `true` is expected for success, and all others for failure.
 
 ximp.js statments are ALWAYS read and evaluated from left-to-right, so `(one.value) EQ (two.value) AND (three.value)` will evaluate to check that `one.value == two.value`, and THEN make sure `three.value` evaluates to true (as it will have no connective). If instead it is written as `(two.value) AND (three.value) EQ (one.value)`, then it will instead check that `two.value` evaluates to true, and then check that `three.value` equals `one.value`.
+
+<u>Examples of Correctly Formed statements</u>
+
+`(id.attribute) EQ (id.attribute)`
+`(id.attribute) AND (id.attribute) GT (id.attribute)`
+`(id.attribute) LT (id.attribute) AND (id.attribute)`
+`(id.attribute) NE (id.attribute) AND (id.attribute) AND (id.attribute) EQ (id.attribute) OR (id.attribute)`
+`(id.attribute)`
+`(id.attribute) AND (id.attribute)`
+
+<u>Examples of Incorrectly Formed statements</u>
+
+`(id.attribute) EQ (id.attribute) EQ (id.attribute)`
+`(id.attribute) (id.attribute)`
+`(id.attribute) AND EQ (id.attribute)`
+`(id.attribute) EQ (id.attribute) AND`
 
 Methods that are named in `ximp-action` or `ximp-action-failure` will always be passed the DOM object of the tag they are associated with.
