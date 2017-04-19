@@ -44,19 +44,19 @@ In the cases where no relational connective (`EQ`,`NE`,`LT`,`GT`) is provided, i
 ximp.js statments are ALWAYS read and evaluated from left-to-right, so `(one.value) EQ (two.value) AND (three.value)` will evaluate to check that `one.value == two.value`, and THEN make sure `three.value` evaluates to true (as it will have no connective). If instead it is written as `(two.value) AND (three.value) EQ (one.value)`, then it will instead check that `two.value` evaluates to true, and then check that `three.value` equals `one.value`.
 
 <u>Examples of Correctly Formed statements</u>
-
-`(id.attribute) EQ (id.attribute)`
-`(id.attribute) AND (id.attribute) GT (id.attribute)`
-`(id.attribute) LT (id.attribute) AND (id.attribute)`
-`(id.attribute) NE (id.attribute) AND (id.attribute) AND (id.attribute) EQ (id.attribute) OR (id.attribute)`
-`(id.attribute)`
-`(id.attribute) AND (id.attribute)`
-
+<br/>
+`(id.attribute) EQ (id.attribute)`<br/>
+`(id.attribute) AND (id.attribute) GT (id.attribute)`<br/>
+`(id.attribute) LT (id.attribute) AND (id.attribute)`<br/>
+`(id.attribute) NE (id.attribute) AND (id.attribute) AND (id.attribute) EQ (id.attribute) OR (id.attribute)`<br/>
+`(id.attribute)`<br/>
+`(id.attribute) AND (id.attribute)`<br/>
+<br/>
 <u>Examples of Incorrectly Formed statements</u>
-
-`(id.attribute) EQ (id.attribute) EQ (id.attribute)`
-`(id.attribute) (id.attribute)`
-`(id.attribute) AND EQ (id.attribute)`
-`(id.attribute) EQ (id.attribute) AND`
-
+<br/>
+`(id.attribute) EQ (id.attribute) EQ (id.attribute)`<br/>
+`(id.attribute) (id.attribute)`<br/>
+`(id.attribute) AND EQ (id.attribute)`<br/>
+`(id.attribute) EQ (id.attribute) AND`<br/>
+<br/>
 Methods that are named in `ximp-action` or `ximp-action-failure` will always be passed the DOM object of the tag they are associated with.
