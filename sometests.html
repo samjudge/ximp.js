@@ -1,0 +1,133 @@
+<html>
+<head>
+<style>
+    div {
+        background-color: #F00;
+        width: 100;
+        height: 100;
+    }
+</style>
+<script src="ximp.js"></script>
+<script>
+    function successColor(target){
+        target.style.backgroundColor = "#0F0";
+        target.innerHTML = "pass";
+    }
+    function failureColor(target){
+        target.style.backgroundColor = "#F00";
+        target.innerHTML = "pass";
+    }
+</script>
+</head>
+<body>
+    <h3>Basic Test</h3>
+    <input id="basicInput" value="true"></input>
+    <br/><br/>
+
+    <div ximp ximp-if="(basicInput.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/>
+    <h3>Basic Test Failure</h3>
+    <input id="basicInputFailure" value="false"></input>
+    <br/><br/>
+    <div ximp ximp-if="(basicInputFailure.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/>
+    <h3>Input Equality Test</h3>
+    <input id="eqTestInput1" value="1"></input>
+    <br/>
+    <input id="eqTestInput2" value="1"></input>
+    <br/><br/>
+    <div ximp ximp-if="(eqTestInput1.value)EQ(eqTestInput2.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/>
+    <h3>Input Equality Test Failure</h3>
+    <input id="eqTestInput1Failure" value="1"></input>
+    <br/>
+    <input id="eqTestInput2Failure" value="2"></input>
+    <br/><br/>
+    <div ximp ximp-if="(eqTestInput1Failure.value)EQ(eqTestInput2Failure.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/>
+    <h3>Connective Condition Test</h3>
+    <input id="connCondTestInput1" value="true"></input>
+    <br/>
+    <input id="connCondTestInput2" value="true"></input>
+    <br/><br/>
+    <div ximp ximp-if="(connCondTestInput1.value)AND(connCondTestInput2.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/>
+    <h3>Connective Condition Test Failure</h3>
+    <input id="connCondTestInput1Failure" value="true"></input>
+    <br/>
+    <input id="connCondTestInput2Failure" value="false"></input>
+    <br/><br/>
+    <div ximp ximp-if="(connCondTestInput1Failure.value)AND(connCondTestInput2Failure.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/>
+    <h3>Compund Condition Test</h3>
+    <input id="comCondTestInput1" value="a"></input>
+    <br/>
+    <input id="comCondTestInput2" value="a"></input>
+    <br/>
+    <input id="comCondTestInput3" value="b"></input>
+    <br/>
+    <input id="comCondTestInput4" value="b"></input>
+    <br/><br/>
+    <div ximp ximp-if="(comCondTestInput1.value)EQ(comCondTestInput2.value)AND(comCondTestInput3.value)EQ(comCondTestInput4.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Compund Condition Test Failure</h3>
+    <input id="comCondTestInput1Failure" value="a"></input>
+    <br/>
+    <input id="comCondTestInput2Failure" value="b"></input>
+    <br/>
+    <input id="comCondTestInput3Failure" value="a"></input>
+    <br/>
+    <input id="comCondTestInput4Failure" value="b"></input>
+    <br/><br/>
+    <div ximp ximp-if="(comCondTestInput1Failure.value)EQ(comCondTestInput2Failure.value)AND(comCondTestInput3Failure.value)EQ(comCondTestInput4Failure.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Complex Compund Condition Test</h3>
+    <input id="ComplexTestInput1" value="true"></input>
+    <br/>
+    <input id="ComplexTestInput2" value="1"></input>
+    <br/>
+    <input id="ComplexTestInput3" value="1"></input>
+    <br/><br/>
+    <div ximp ximp-if="(ComplexTestInput1.value)AND(ComplexTestInput2.value)EQ(ComplexTestInput3.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Complex Compund Condition Test Failure (1, first statement fails)</h3>
+    <input id="ComplexTestInput1Failure1" value="false"></input>
+    <br/>
+    <input id="ComplexTestInput2Failure1" value="1"></input>
+    <br/>
+    <input id="ComplexTestInput3Failure1" value="1"></input>
+    <br/><br/>
+    <div ximp ximp-if="(ComplexTestInput1Failure1.value)AND(ComplexTestInput2Failure1.value)EQ(ComplexTestInput3Failure1.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Complex Compund Condition Test Failure (2, second statement fails)</h3>
+    <input id="ComplexTestInput1Failure2" value="true"></input>
+    <br/>
+    <input id="ComplexTestInput2Failure2" value="1"></input>
+    <br/>
+    <input id="ComplexTestInput3Failure2" value="2"></input>
+    <br/><br/>
+    <div ximp ximp-if="(ComplexTestInput1Failure2.value)AND(ComplexTestInput2Failure2.value)EQ(ComplexTestInput3Failure2.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Complex Compund Condition Test Failure (3, Reverse structure)</h3>
+    <input id="ComplexTestInput1Failure3" value="true"></input>
+    <br/>
+    <input id="ComplexTestInput2Failure3" value="1"></input>
+    <br/>
+    <input id="ComplexTestInput3Failure3" value="2"></input>
+    <br/><br/>
+    <div ximp ximp-if="(ComplexTestInput2Failure3.value)EQ(ComplexTestInput3Failure3.value)AND(ComplexTestInput1Failure3.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Compund Condition Test ('OR')</h3>
+    <input id="testOr1" value="true"></input>
+    <br/>
+    <input id="testOr2" value="false"></input>
+    <br/><br/>
+    <div ximp ximp-if="(testOr1.value)OR(testOr2.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Compund Condition Test ('OR') Failure (No true)</h3>
+    <input id="testOr21" value="false"></input>
+    <br/>
+    <input id="testOr22" value="false"></input>
+    <br/><br/>
+    <div ximp ximp-if="(testOr21.value)OR(testOr22.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Complex Compund Condition Test ('OR')</h3>
+    <input id="testOr31" value="false"></input>
+    <br/>
+    <input id="testOr32" value="false"></input>
+    <br/><br/>
+    <div ximp ximp-if="(testOr31.value)OR(testOr32.value)EQ(testOr32.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+</body>
+</html>
