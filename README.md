@@ -5,7 +5,7 @@ Using ximp.js means you don't need the boilerplate you would normally need to us
 
 It allows you to write your javascript to interact with your HTML imperatively, easily.
 
-I made it because I wanted to use the cool power of directives without the need for the data binding, models, or controllers that are included with the heavyweight angular, or even the lightweight vue. There's no need for ANY setup besides dropping the file in your project and importing it using a script tag. You can immidately start using ximp's custom directives. It began when I inherited a huge HTML form with hundreds of inputs (and constatnly changing requirements). One constant in the requirements, however, was that the page's inputs followed a branching structure (i.e. if user selects x in input a then show input b). Ximp.js makes implementing this easy. This resulted in my javascript being majority boilerplate for essentailly cantrip logic.
+I made it because I wanted to use the cool power of directives without the need for the data binding, models, or controllers that are included with the heavyweight angular, or even the lightweight vue. There's no need for ANY setup besides dropping the file in your project and importing it using a script tag. You can immidately start using ximp's custom directives. It began when I inherited a huge HTML form with hundreds of inputs (and constatnly changing requirements). One constant in the requirements, however, was that the page's inputs followed a branching structure (i.e. if user selects x in input a then show input b). Ximp.js makes implementing this easy.
 
 Here is a typical usage example :
 
