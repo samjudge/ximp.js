@@ -60,3 +60,15 @@ ximp.js statments are ALWAYS read and evaluated from left-to-right, so `(one.val
 `(id.attribute) EQ (id.attribute) AND`<br/>
 <br/>
 Methods that are named in `ximp-action` or `ximp-action-failure` will always be passed the DOM object of the tag they are associated with.
+
+You can use `ximp-foreach` in order to apply `ximp-action` to all children elements, using `ximp-foreach-init` will run the specified callback once before running `ximp-action` on child elements.
+
+i.e. 
+
+```
+<ul ximp ximp-foreach ximp-foreach-init="initFunction" ximp-action="onEachChildFunction">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+</ul>
+```
