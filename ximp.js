@@ -3,13 +3,15 @@ const coroutineDelay = 500;
 const reactive = true;
 
 var Ximp = function(){
-    this.condition = "";
-    this.action = "";
-    this.failureAction = "";
+    this.condition = null;
+    this.action = null;
+    this.failureAction = null;
+    this.doForeachInit = null;
+    this.doForeach = false;
     this.args = [];
     this.dom;
-    
-    this.evaluate = function(){
+
+    this.evaluateCondition = function(){
         this.condition = this.condition.replace(/\s/g, ''); //remove all spaces
         var iterPosition = 0;
         var conditionEntities = [];
@@ -146,11 +148,13 @@ var Ximp = function(){
             if(connectives.length == 0){
                 if(statementResults[0] == true){
                     var node = this.dom;
-                    eval(this.action+"(node)"); //no args (just a reference to `this`)
+                    return true;
+                    //eval(this.action+"(node)"); //no args (just a reference to `this`)
                 } else {
                     if(this.failureAction != null){
                         var node = this.dom;
-                        eval(this.failureAction+"(node)");
+                        return false;
+                        //eval(this.failureAction+"(node)");
                     }
                 }
             } else {
@@ -179,13 +183,9 @@ var Ximp = function(){
                     statementResultsPointer += 1;
                 }
                 if(compoundResults.indexOf(false) == -1){
-                    var node = this.dom;
-                    eval(this.action+"(node)"); //no args (just a reference to `this`)
+                    return true;
                 } else {
-                    if(this.failureAction != null){
-                        var node = this.dom;
-                        eval(this.failureAction+"(node)");
-                    }
+                    return false;
                 }
             }
         }
@@ -194,6 +194,15 @@ var Ximp = function(){
 
 function evaluateAllXimpsCoroutine(){
     var ximps = document.querySelectorAll("[ximp]");
+    for(var x = 0; x < ximps.length ; x++){
+        var ximpDomNode = ximps[x];
+        var currentXimp = new Ximp();
+        if(ximpDomNode.hasAttribute("ximp-foreach")){
+            if(ximpDomNode.getAttribute("ximp-foreach") == ""){
+                
+            }
+        }
+    }
     for(var x = 0; x < ximps.length ; x++){
         var ximpDomNode = ximps[x];
         var currentXimp = new Ximp();
@@ -207,10 +216,34 @@ function evaluateAllXimpsCoroutine(){
         if(ximpDomNode.hasAttribute("ximp-if")){
             var condition = ximpDomNode.getAttribute("ximp-if");
             currentXimp.condition = condition;
-        } else {
-            eval(currentXimp.action+"(ximpDomNode)");
         }
-        currentXimp.evaluate();
+        if(ximpDomNode.hasAttribute("ximp-foreach")){
+            currentXimp.doForeach = true;
+        }
+        if(ximpDomNode.hasAttribute("ximp-foreach-init")){
+            currentXimp.doForeachInit = ximpDomNode.getAttribute("ximp-foreach-init");
+        }
+        var conditionPassed = true;
+        if(currentXimp.condition != null){
+            conditionPassed = currentXimp.evaluateCondition()
+        }
+        if(currentXimp.doForeach){
+            eval(currentXimp.doForeachInit+"(currentXimp)");
+            var domChildren = ximpDomNode.children;
+            for(var y = 0; y < domChildren.length ; y++){
+               var cChild = domChildren[y];
+               eval(currentXimp.action+"(cChild)");
+            }
+        } else {
+            if(conditionPassed){
+                eval(currentXimp.action+"(ximpDomNode)");
+            } else {
+                if(currentXimp.failureAction != null){
+                    eval(currentXimp.failureAction+"(ximpDomNode)");
+                }
+            }
+        }
+
     }
     if(reactive){
         setTimeout(evaluateAllXimpsCoroutine,coroutineDelay);

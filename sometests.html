@@ -9,21 +9,36 @@
 </style>
 <script src="ximp.js"></script>
 <script>
-    function successColor(target){
-        target.style.backgroundColor = "#0F0";
-        target.innerHTML = "pass";
+    function successColor(that){
+        that.style.backgroundColor = "#0F0";
+        that.innerHTML = "pass";
     }
-    function failureColor(target){
-        target.style.backgroundColor = "#F00";
-        target.innerHTML = "pass";
+    function failureColor(that){
+        that.style.backgroundColor = "#F00";
+        that.innerHTML = "failure";
     }
+    var sumTestVal = 0;
+    function sumTest(that){
+        sumTestVal += parseInt(that.textContent);
+        var iteroutput = document.getElementById("testiteroutput1");
+        iteroutput.value = sumTestVal;
+    }
+    function resetTestiteroutput1(that){
+        sumTestVal = 0;
+    }
+    var concatString = 0;
+    function concatTest(that){
+        concatString += that.textContent;
+        var iteroutput = document.getElementById("testiteroutput2");
+        iteroutput.value = sumTestVal;
+    }
+    
 </script>
 </head>
 <body>
     <h3>Basic Test</h3>
     <input id="basicInput" value="true"></input>
     <br/><br/>
-
     <div ximp ximp-if="(basicInput.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
     <br/>
     <h3>Basic Test Failure</h3>
@@ -129,5 +144,24 @@
     <input id="testOr32" value="false"></input>
     <br/><br/>
     <div ximp ximp-if="(testOr31.value)OR(testOr32.value)EQ(testOr32.value)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <h3>Iterator Example</h3>
+    <input id="testiteroutput1" type="text" value="0"></input>
+    <ul ximp ximp-foreach ximp-foreach-init="resetTestiteroutput1" ximp-action="sumTest">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+    </ul>
+    <div ximp ximp-if="(testiteroutput1.value)EQ(6)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/><br/>
+    <!--h3>Self-Referential Iterator Example</h3>
+    <br/><br/>
+    <input id="testiteroutput2" type="text" value=""></input>
+    <div ximp ximp-foreach ximp-action="concatTest">
+        <div>a</div>
+        <div>b</div>
+        <div>c</div>
+    </div>
+    <div ximp ximp-if="(testiteroutput2)EQ(abc)" ximp-action-failure="failureColor" ximp-action="successColor"></div-->
+    <br/><br/>
 </body>
 </html>
