@@ -72,3 +72,13 @@ i.e.
     <li>3</li>
 </ul>
 ```
+
+You could include a `ximp-if` attribute in order to conditionally run the for-each.
+
+```
+<ul ximp ximp-foreach ximp-if="(x.value)GT(y.value)" ximp-foreach-init="initFunction" ximp-action="onEachChildFunction">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+</ul>
+```
