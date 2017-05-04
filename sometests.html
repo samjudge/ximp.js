@@ -2,13 +2,15 @@
 <head>
 <style>
     div {
-        background-color: #F00;
         width: 100;
-        height: 100;
     }
 </style>
 <script src="ximp.js"></script>
 <script>
+    function donothing(that){
+        that.innerHTML = "failure";
+    }
+
     function successColor(that){
         that.style.backgroundColor = "#0F0";
         that.innerHTML = "pass";
@@ -26,13 +28,26 @@
     function resetTestiteroutput1(that){
         sumTestVal = 0;
     }
-    var concatString = 0;
+
+    var concatString = "";
     function concatTest(that){
         concatString += that.textContent;
         var iteroutput = document.getElementById("testiteroutput2");
-        iteroutput.value = sumTestVal;
+        iteroutput.value = concatString;
     }
-    
+    function resetTestiteroutput2(that){
+        concatString = "";
+    }
+
+    var concatString = "";
+    function concatTest2(that){
+        concatString += that.textContent;
+        var iteroutput = document.getElementById("testiteroutput3");
+        iteroutput.value = concatString;
+    }
+    function resetTestiteroutput3(that){
+        concatString = "";
+    }
 </script>
 </head>
 <body>
@@ -153,15 +168,23 @@
     </ul>
     <div ximp ximp-if="(testiteroutput1.value)EQ(6)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
     <br/><br/>
-    <!--h3>Self-Referential Iterator Example</h3>
-    <br/><br/>
+    <h3>Iterator Example (Condition True)</h3>
     <input id="testiteroutput2" type="text" value=""></input>
-    <div ximp ximp-foreach ximp-action="concatTest">
+    <div ximp ximp-if="(1)EQ(1)" ximp-foreach ximp-foreach-init="resetTestiteroutput2" ximp-action="concatTest" ximp-action-failure="donothing">
         <div>a</div>
         <div>b</div>
         <div>c</div>
     </div>
-    <div ximp ximp-if="(testiteroutput2)EQ(abc)" ximp-action-failure="failureColor" ximp-action="successColor"></div-->
+    <div ximp ximp-if="(testiteroutput2.value)EQ(abc)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
+    <br/><br/>
+    <h3>Iterator Example (Condition False - Pass)</h3>
+    <input id="testiteroutput3" type="text" value=""></input>
+    <div ximp ximp-if="(1)EQ(3)" ximp-foreach ximp-foreach-init="resetTestiteroutput3" ximp-action="concatTest2">
+        <div>x</div>
+        <div>y</div>
+        <div>z</div>
+    </div>
+    <div ximp ximp-if="(testiteroutput3.value)NE(xyz)" ximp-action-failure="failureColor" ximp-action="successColor"></div>
     <br/><br/>
 </body>
 </html>
