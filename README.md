@@ -73,7 +73,7 @@ i.e.
 </ul>
 ```
 
-You could include a `ximp-if` attribute in order to conditionally run the for-each.
+You could include a `ximp-if` attribute in order to conditionally run the for-each (`ximp-foreach-init` will still run).
 
 ```
 <ul ximp ximp-foreach ximp-if="(x.value)GT(y.value)" ximp-foreach-init="initFunction" ximp-action="onEachChildFunction">
