@@ -229,10 +229,12 @@ function evaluateAllXimpsCoroutine(){
         }
         if(currentXimp.doForeach){
             eval(currentXimp.doForeachInit+"(currentXimp)");
-            var domChildren = ximpDomNode.children;
-            for(var y = 0; y < domChildren.length ; y++){
-               var cChild = domChildren[y];
-               eval(currentXimp.action+"(cChild)");
+            if(conditionPassed){
+                var domChildren = ximpDomNode.children;
+                for(var y = 0; y < domChildren.length ; y++){
+                var cChild = domChildren[y];
+                eval(currentXimp.action+"(cChild)");
+                }
             }
         } else {
             if(conditionPassed){
