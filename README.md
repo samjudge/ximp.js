@@ -82,3 +82,22 @@ You could include a `ximp-if` attribute in order to conditionally run the for-ea
     <li>3</li>
 </ul>
 ```
+
+Ximp has the `ximp-args` attribute to pass <i>additional</i> arguments to functions named in `ximp-action` and `ximp-action-failure`.
+A reference to the dom object will still always be passed as the first argument. You may also pass arguments in the form of `id.attribute`, as in conditionals (see `ximp-if`). Arguments are comma seperated.
+
+i.e.
+
+```
+<script>
+  function addArgsAndSetValue(domObject,x,y){
+    domObject.value = x + y;
+  }
+  
+  function alertUser(domObject, value){
+    alert("inputWithArgs' value is " + value + "!");
+  }
+</script>
+<input ximp ximp-args="3,3" ximp-action="addArgsAndSetValue" id="inputWithArgs" type="text"></input>
+<div ximp ximp-if="(inputWithArgs.value)EQ(6)" ximp-args="inputWithArgs.value" ximp-action="alertUserOfArg"></div>
+```
