@@ -2,6 +2,41 @@
 const coroutineDelay = 500;
 const reactive = true;
 
+/**
+ * Treats id.attribute strings simlarly to how reference.property strings work in other langauges
+ * i.e.
+ * `object1.myval`
+ * would get the `myval` of object1 in an OOP langauge
+ * here, it gets the tag with the id `object1` and returns it's attribute `myval`
+ * if the string does not parse correctly (that is, without a property/attribute specified)
+ * then it will return the string literal `e`
+ * if a id.attribute combination does not exist in the page, it will return the string literal `e`
+ * @param {string} e - the id.attribute string
+ */
+function parseTagProperty(e){
+    var idEnd = e.indexOf(".");
+    var attrStart = e.indexOf(".")+1;
+    var id = e.substring(0,idEnd);
+    var attribute = e.substring(attrStart);
+    var watching = document.getElementById(id);
+    if (typeof watching != 'undefined' && watching) {
+        if(attribute == "value" && reactive){
+            return watching.value; //this must be here, as the value -attribute- on the tag does not update, even if the actual value does
+        } else {
+            if(watching.hasAttribute(attribute)){
+                return watching.getAttribute(attribute);
+            } else {
+                console.log("Oopsie! Attribute does not exist for the given id : " + id + ", and so will be treat as a string literal");
+                return e;
+            }
+        }
+    } else {
+        console.log("Element with id '" + id + "' does not exist, and will be treat as a string literal");
+        return e;
+    }
+}
+
+
 var Ximp = function(){
     this.condition = null;
     this.action = null;
@@ -35,38 +70,17 @@ var Ximp = function(){
         var substitutions = [];
         for(var x = 0; x < conditionEntities.length ; x++){
             var e = conditionEntities[x];
-            var idEnd = e.indexOf(".");
-            var attrStart = e.indexOf(".")+1;
-            var id = e.substring(0,idEnd);
-            var attribute = e.substring(attrStart);
-            var watching = document.getElementById(id);
-            if (typeof watching != 'undefined' && watching) {
-                if(attribute == "value" && reactive){
-                    substitutions.push(watching.value);
-                } else {
-                    if(watching.hasAttribute(attribute)){
-                        substitutions.push(watching.getAttribute(attribute))
-                    } else {
-                        console.log("Oopsie! Attribute does not exist for the given id : " + id);
-                        substitutions.push(false);
-                    }
-                }
-            } else {
-                console.log("Element with id '" + id + "' does not exist, and will be treat as a string literal");
-                substitutions.push(e) //if an id cannot be found, 
-            }
+            substitutions.push(parseTagProperty(e));
         }
         var substitutionsPointer = 0;
         var statementResults = [];
         //resolving-connectives
         if(connectives.length == 0){
             if(substitutions[0] === "true" || substitutions[0] == true){
-                var node = this.dom
-                eval(this.action+"(node)"); //no args (just a reference to `this`)
+                return true;
             } else {
                 if(this.failureAction != null){
-                    var node = this.dom;
-                    eval(this.failureAction+"(node)");
+                    return false;
                 }
             }
         } else {
@@ -154,7 +168,6 @@ var Ximp = function(){
                     if(this.failureAction != null){
                         var node = this.dom;
                         return false;
-                        //eval(this.failureAction+"(node)");
                     }
                 }
             } else {
@@ -207,6 +220,15 @@ function evaluateAllXimpsCoroutine(){
         var ximpDomNode = ximps[x];
         var currentXimp = new Ximp();
         currentXimp.dom = ximpDomNode;
+        /*
+         * For testing
+         */
+        if(ximpDomNode.id == "testparams2"){
+            console.log("fortesting");
+        }
+        /*
+         * End for testing
+         */
         if(ximpDomNode.hasAttribute("ximp-action")){
             currentXimp.action = ximpDomNode.getAttribute("ximp-action");
         }
@@ -223,29 +245,48 @@ function evaluateAllXimpsCoroutine(){
         if(ximpDomNode.hasAttribute("ximp-foreach-init")){
             currentXimp.doForeachInit = ximpDomNode.getAttribute("ximp-foreach-init");
         }
+        if(ximpDomNode.hasAttribute("ximp-args")){
+            currentXimp.args = [];
+            var argsString = ximpDomNode.getAttribute("ximp-args");
+            var argsArray = argsString.split(","); //parge the args as a comma spertaed list
+            for(var y = 0; y < argsArray.length; y++){
+                var literalArg = argsArray[y];
+                var value = parseTagProperty(literalArg);
+                argsArray[y] = value;
+            }
+            currentXimp.args = argsArray;
+        }
         var conditionPassed = true;
         if(currentXimp.condition != null){
             conditionPassed = currentXimp.evaluateCondition()
         }
+        var argsArray = currentXimp.args;
+        var argsString = "";
+        for(var u = 0 ; u < argsArray.length ; u++){
+            argsString += ",'";
+            var arg = argsArray[u];
+            argsString += arg;
+            argsString += "'";
+        }
+        argsString += ")";
         if(currentXimp.doForeach){
-            eval(currentXimp.doForeachInit+"(currentXimp)");
+            eval(currentXimp.doForeachInit+"(currentXimp"+argsString);
             if(conditionPassed){
                 var domChildren = ximpDomNode.children;
                 for(var y = 0; y < domChildren.length ; y++){
-                var cChild = domChildren[y];
-                eval(currentXimp.action+"(cChild)");
+                    var cChild = domChildren[y];
+                    eval(currentXimp.action+"(cChild"+argsString);
                 }
             }
         } else {
             if(conditionPassed){
-                eval(currentXimp.action+"(ximpDomNode)");
+                eval(currentXimp.action+"(ximpDomNode"+argsString);
             } else {
                 if(currentXimp.failureAction != null){
-                    eval(currentXimp.failureAction+"(ximpDomNode)");
+                    eval(currentXimp.failureAction+"(ximpDomNode"+argsString);
                 }
             }
         }
-
     }
     if(reactive){
         setTimeout(evaluateAllXimpsCoroutine,coroutineDelay);
