@@ -61,6 +61,8 @@ ximp.js statments are ALWAYS read and evaluated from left-to-right, so `(one.val
 <br/>
 Methods that are named in `ximp-action` or `ximp-action-failure` will always be passed the DOM object of the tag they are associated with.
 
+At present the <b>default</b> behaviour of ximp is to run as a couroutine (evaluate all conditions, then evaluate them repeatedly for the lifecycle of the page). Understandably if this is not what you want, you can modify the const values at the top of the ximp.js file (`const reactive = true` & `const coroutineDelay = 500` - to adjust how long the process should sleep for in between evaluations, if at all).
+
 You can use `ximp-foreach` in order to apply `ximp-action` to all children elements, using `ximp-foreach-init` will run the specified callback once before running `ximp-action` on child elements.
 
 i.e. 
@@ -73,7 +75,7 @@ i.e.
 </ul>
 ```
 
-You could include a `ximp-if` attribute in order to conditionally run the for-each (`ximp-foreach-init` will still run).
+You could include a `ximp-if` attribute in order to conditionally run the for-each (`ximp-foreach-init` will still run, reguardless of condition passing or failing).
 
 ```
 <ul ximp ximp-foreach ximp-if="(x.value)GT(y.value)" ximp-foreach-init="initFunction" ximp-action="onEachChildFunction">
@@ -89,9 +91,10 @@ A reference to the dom object will still always be passed as the first argument.
 i.e.
 
 ```
+<script src="ximp.js"></script>
 <script>
   function addArgsAndSetValue(domObject,x,y){
-    domObject.value = x + y;
+    domObject.value = parseInt(x) + parseInt(y);
   }
   
   function alertUser(domObject, value){
@@ -99,5 +102,5 @@ i.e.
   }
 </script>
 <input ximp ximp-args="3,3" ximp-action="addArgsAndSetValue" id="inputWithArgs" type="text"></input>
-<div ximp ximp-if="(inputWithArgs.value)EQ(6)" ximp-args="inputWithArgs.value" ximp-action="alertUserOfArg"></div>
+<div ximp ximp-if="(inputWithArgs.value)EQ(6)" ximp-args="inputWithArgs.value" ximp-action="alertUser"></div>
 ```
