@@ -35,22 +35,19 @@ When a user enters the text "Hello!", a message will appear to greet them!
 
 The general structure of a ximp.js expression (the bit inside the `ximp-if` attribute) is as follows : 
 
-`(T) n (T)`
+`(T) r (T) n (T) r (T)`
 
 Where `T` represents either a literal value OR is a token speicifying the id and attribute it is to watch (i.e. `id.attribute`, such as in the above example), this may be the id of ANY tag, and the attribute must be ANY attribute that tag has. `n` represents a "Connective". Connectives represent a combination of the typical relational and logical operators you would find in other langauges such as `==`, `!=`, `<`, `>`,`&&`, and `||`. Instead of these symboles, ximp.js uses the fortran style of `EQ` for equality, `NE` for non-equality, `LT` for less-than, `GT` for greater than and `AND`+`OR` appropriately (Because variety is the spice of life). The parenthesis are not optional.
 
 In the cases where no relational connective (`EQ`,`NE`,`LT`,`GT`) is provided, it is assumed the value `true` is expected for success, and all others for failure.
 
-ximp.js statments are ALWAYS read and evaluated from left-to-right, so `(one.value) EQ (two.value) AND (three.value)` will evaluate to check that `one.value == two.value`, and THEN make sure `three.value` evaluates to true (as it will have no connective). If instead it is written as `(two.value) AND (three.value) EQ (one.value)`, then it will instead check that `two.value` evaluates to true, and then check that `three.value` equals `one.value`.
-
 <u>Examples of Correctly Formed statements</u>
 <br/>
-`(id.attribute) EQ (id.attribute)`<br/>
-`(id.attribute) AND (id.attribute) GT (id.attribute)`<br/>
-`(id.attribute) LT (id.attribute) AND (id.attribute)`<br/>
-`(id.attribute) NE (id.attribute) AND (id.attribute) AND (id.attribute) EQ (id.attribute) OR (id.attribute)`<br/>
 `(id.attribute)`<br/>
-`(id.attribute) AND (id.attribute)`<br/>
+`(id.attribute) EQ (id.attribute)`<br/>
+`(id.attribute) LT (id.attribute) AND (id.attribute) GT (id.attribute)`<br/>
+`(id.attribute) NE (id.attribute) AND (id.attribute) EQ (true) AND (id.attribute) EQ (id.attribute) OR (id.attribute) NE (false)`<br/>
+
 <br/>
 <u>Examples of Incorrectly Formed statements</u>
 <br/>
@@ -58,7 +55,13 @@ ximp.js statments are ALWAYS read and evaluated from left-to-right, so `(one.val
 `(id.attribute) (id.attribute)`<br/>
 `(id.attribute) AND EQ (id.attribute)`<br/>
 `(id.attribute) EQ (id.attribute) AND`<br/>
+`(id.attribute) AND (id.attribute) GT (id.attribute)`<br/>
+`(id.attribute) LT (id.attribute) AND (id.attribute) GT`<br/>
+`(id.attribute) AND (id.attribute)`<br/>
 <br/>
+
+If no connectives are present (EQ, AND, etc), the default ximp expression will be `(whateveryoupassed)EQ(true)`. It is recommended that you <i>always</i> pass a relational operator (EQ, NE, GT, LT,. etc.).
+
 Methods that are named in `ximp-action` or `ximp-action-failure` will always be passed the DOM object of the tag they are associated with.
 
 At present the <b>default</b> behaviour of ximp is to run as a couroutine (evaluate all conditions, then evaluate them repeatedly for the lifecycle of the page). Understandably if this is not what you want, you can modify the const values at the top of the ximp.js file (`const reactive = true` & `const coroutineDelay = 500` - to adjust how long the process should sleep for in between evaluations, if at all).
