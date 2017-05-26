@@ -46,18 +46,17 @@ In the cases where no relational connective (`EQ`,`NE`,`LT`,`GT`) is provided, i
 `(id.attribute)`<br/>
 `(id.attribute) EQ (id.attribute)`<br/>
 `(id.attribute) LT (id.attribute) AND (id.attribute) GT (id.attribute)`<br/>
-`(id.attribute) NE (id.attribute) AND (id.attribute) EQ (true) AND (id.attribute) EQ (id.attribute) OR (id.attribute) NE (false)`<br/>
-
+`(id.attribute) NE (id.attribute) AND (id.attribute) EQ (true) AND (id.attribute) EQ (id.attribute)`<br/>
 <br/>
 <u>Examples of Incorrectly Formed statements</u>
 <br/>
-`(id.attribute) EQ (id.attribute) EQ (id.attribute)`<br/>
-`(id.attribute) (id.attribute)`<br/>
-`(id.attribute) AND EQ (id.attribute)`<br/>
-`(id.attribute) EQ (id.attribute) AND`<br/>
-`(id.attribute) AND (id.attribute) GT (id.attribute)`<br/>
-`(id.attribute) LT (id.attribute) AND (id.attribute) GT`<br/>
-`(id.attribute) AND (id.attribute)`<br/>
+`(id.attribute) EQ (id.attribute) EQ (id.attribute)` <br/>
+`(id.attribute) (id.attribute)` <br/>
+`(id.attribute) AND EQ (id.attribute)` <br/>
+`(id.attribute) EQ (id.attribute) AND` <br/>
+`(id.attribute) AND (id.attribute) GT (id.attribute)` <br/>
+`(id.attribute) LT (id.attribute) AND (id.attribute) GT` <br/>
+`(id.attribute) AND (id.attribute)` <br/>
 <br/>
 
 If no connectives are present (EQ, AND, etc), the default ximp expression will be `(whateveryoupassed)EQ(true)`. It is recommended that you <i>always</i> pass a relational operator (EQ, NE, GT, LT,. etc.).
