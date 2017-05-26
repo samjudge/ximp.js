@@ -21,6 +21,13 @@ function parseTagProperty(e){
     var watching = document.getElementById(id);
     if (typeof watching != 'undefined' && watching) {
         if(attribute == "value" && reactive){
+            if(watching.type == "checkbox"){
+                if(watching.checked == true){
+                    return "true";
+                } else if (watching.checked == false){
+                    return "false";
+                }
+            }
             return watching.value; //this must be here, as the value -attribute- on the tag does not update, even if the actual value does
         } else {
             if(watching.hasAttribute(attribute)){
@@ -36,6 +43,54 @@ function parseTagProperty(e){
     }
 }
 
+function evaluateRelationalStatement(conditionalConnective, lh, rh){
+    if(conditionalConnective == "EQ"){
+        if(lh == rh){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    if(conditionalConnective == "NE"){
+        if(lh != rh){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    if(conditionalConnective == "GT"){
+        if(lh > rh){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    if(conditionalConnective == "LT") {
+        if (lh < rh) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return null;
+}
+
+function evaluateLogicalStatement(logicalConnective, lh, rh){
+    if(logicalConnective == "AND"){
+        if(lh && rh){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    if(logicalConnective == "OR"){
+        if(lh || rh){
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 var Ximp = function(){
     this.condition = null;
@@ -84,137 +139,57 @@ var Ximp = function(){
                 }
             }
         } else {
-            for(var x = 0; x < connectives.length; x++){
+            /*
+             * evaluate relational statements
+             */
+            for(var x = 0; x < substitutions.length; x++){
                 var connective = connectives[x];
-                if(connective == "EQ"){
+                if(connective == "EQ" || connective  == "NE" || connective == "GT" || connective == "LT"){
                     var arg_1 = substitutions[substitutionsPointer];
                     var arg_2 = substitutions[substitutionsPointer+1];
-                    if(arg_1 == arg_2){
-                        statementResults.push(true);
-                    } else {
-                        statementResults.push(false);
-                    }
-                    substitutionsPointer = substitutionsPointer+2;
-                    continue;
+                    var result = evaluateRelationalStatement(connective, arg_1, arg_2);
+                    statementResults.push(result);
                 }
-                if(connective == "NE"){
-                    var arg_1 = substitutions[substitutionsPointer];
-                    var arg_2 = substitutions[substitutionsPointer+1];
-                    if(arg_1 != arg_2){
-                        statementResults.push(true);
-                    } else {
-                        statementResults.push(false);
-                    }
-                    substitutionsPointer = substitutionsPointer+2;
-                    continue;
-                }
-                if(connective == "GT"){
-                    var arg_1 = substitutions[substitutionsPointer];
-                    var arg_2 = substitutions[substitutionsPointer+1];
-                    if(arg_1 > arg_2){
-                        statementResults.push(true);
-                    } else {
-                        statementResults.push(false);
-                    }
-                    substitutionsPointer = substitutionsPointer+2;
-                    continue;
-                }
-                if(connective == "LT"){
-                    var arg_1 = substitutions[substitutionsPointer];
-                    var arg_2 = substitutions[substitutionsPointer+1];
-                    if(arg_1 < arg_2){
-                        statementResults.push(true);
-                    } else {
-                        statementResults.push(false);
-                    }
-                    substitutionsPointer = substitutionsPointer+2;
-                    continue;
-                }
-                var arg_left = substitutions[substitutionsPointer];
-                if(arg_left === "true" || arg_left == true){
-                    statementResults.push(true);
-                    substitutionsPointer = substitutionsPointer+1;
-                } else if (arg_left === "false" || arg_left == false){
-                    statementResults.push(false);
-                    substitutionsPointer = substitutionsPointer+1;
-                }
-                if(x == connectives.length-1){
-                    var arg_right = substitutions[substitutionsPointer];
-                    if(arg_right === "true" || arg_right == true){
-                        statementResults.push(true);
-                        substitutionsPointer = substitutionsPointer+1;
-                    } else if (arg_right === "false" || arg_right == false){
-                        statementResults.push(false);
-                        substitutionsPointer = substitutionsPointer+1;
-                    }
-                }
+                substitutionsPointer = substitutionsPointer+1;
             }
-            //remove evaluation-connectives
+            /*
+             * remove relational connectives (oprands)
+             */
             for(var x = connectives.length; x > 0; x--){
                 var connective = connectives[x-1];
                 if(connective == "EQ" || connective == "LT" || connective == "GT" || connective == "NE"){
                     connectives.splice(x-1,1);
                 }
             }
-            //compound-evaluations
+            /*
+             * evaluate logical statements
+             */
             var compoundResults = [];
-            var statementResultsPointer = 0;
-            if(connectives.length == 0){
-                if(statementResults[0] == true){
-                    var node = this.dom;
-                    return true;
-                    //eval(this.action+"(node)"); //no args (just a reference to `this`)
-                } else {
-                    if(this.failureAction != null){
-                        var node = this.dom;
-                        return false;
-                    }
+            while(statementResults[1] != null){
+                var connective = connectives[0];
+                var result = null;
+                if(connective == "AND" || connective == "OR" ) {
+                    var lh = statementResults[0]; //base
+                    var rh = statementResults[1]; //head
+                    result = evaluateLogicalStatement(connective, lh, rh);
                 }
-            } else {
-                for(var x = 0; x < connectives.length; x++){
-                    var connective = connectives[x];
-                    if(connective == "AND"){
-                        if(statementResults[statementResultsPointer] && statementResults[statementResultsPointer+1]){
-                            compoundResults.push(true);
-                            statementResultsPointer += 1;
-                        } else {
-                            compoundResults.push(false);
-                            statementResultsPointer += 1;
-                        }
-                        continue;
-                    }
-                    if(connective == "OR"){
-                        if(statementResults[statementResultsPointer] || statementResults[statementResultsPointer+1]){
-                            compoundResults.push(true);
-                            statementResultsPointer += 1;
-                        } else {
-                            compoundResults.push(false);
-                            statementResultsPointer += 1;
-                        }
-                        continue;
-                    }
-                    statementResultsPointer += 1;
-                }
-                if(compoundResults.indexOf(false) == -1){
-                    return true;
-                } else {
-                    return false;
-                }
+                //remove zero-th connective
+                connectives.shift();
+                statementResults.splice(0,2,result);
             }
+            /*
+             * return zeroth index, the compound result of the statement
+             */
+            return statementResults[0];
         }
     }
-}
+};
 
 function evaluateAllXimpsCoroutine(){
     var ximps = document.querySelectorAll("[ximp]");
     for(var x = 0; x < ximps.length ; x++){
         var ximpDomNode = ximps[x];
         var currentXimp = new Ximp();
-        if(ximpDomNode.hasAttribute("ximp-foreach")){
-            if(ximpDomNode.getAttribute("ximp-foreach") == ""){
-                
-            }
-        }
     }
     for(var x = 0; x < ximps.length ; x++){
         var ximpDomNode = ximps[x];
@@ -223,7 +198,7 @@ function evaluateAllXimpsCoroutine(){
         /*
          * For testing
          */
-        if(ximpDomNode.id == "testparams2"){
+        if(ximpDomNode.id == "connectiveConditionTest"){
             console.log("fortesting");
         }
         /*
