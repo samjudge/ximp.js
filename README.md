@@ -1,11 +1,15 @@
 # ximp.js
 Ximp.js (eXplicitly IMPerative) is a small tool used to implement logical control in your HTML tags through ximp's custom attributes. It is specifically targetted for newer developers so I can get them into bad habits early (jk). It's probably a bit (very) buggy, so make an issue (or even a test case) if you find anything!
 
-Using ximp.js means you don't need the boilerplate you would normally need to use in javascript in order to implement logical control over your HTML, or when using javascript to add dynamic control over your page would normally be impractical due to it's size, or when you would use ajax to update what would otherwise be static assets. While I'm a huge fan of both vuejs and angular, which offer directives, sometimes a website is still just a website, not an SPA or something that requires two-way binding and a controller. Ximp.js is about getting a lot of things done on the front end, fast.
+The premise is simple. Ximp.js lets you use your actual HTML as your data. Your variables are now your input tags, and can be accessed via ximp's special statements.
+
+It's kind of a mad experiment, but it's worked out for me in a number of sticky problems now, and more importantly, it's a fun way to program and incredibly easy and intuitive to use.
+
+Using ximp.js means you don't need the boilerplate you would normally need to use in javascript in order to implement logical control over your HTML. Ximp.js is about getting a lot of things done on the front end, fast.
 
 It allows you to easily write how your javascript interacts with your HTML. Ximp.js takes care of the "<i>how</i>" you access your HTML, leaving you to focus entirely on the "<i>what</i>" of your functions in javascript.
 
-I made it because I wanted to use the cool power of directives without the need for the data binding, models, or controllers. With ximp.js, there's no need for ANY setup besides dropping the file in your project and importing it using a script tag. You can immidately start using ximp's custom directives. Ximp.js is perfect for web projects that have constantly evolving requirements, huge forms with conditional flows, and online wizards. Ximp.js makes implementing these easy. When your primary source of data is embedded in the HTML/DOM itself, ximp.js is what you need.
+I made it because I wanted to use the cool power of directives without the need for the data binding, models, or controllers. With ximp.js, there's no need for ANY setup besides dropping the file in your project and importing it using a script tag. You can immidately start using ximp's custom directives. Ximp.js is perfect for web projects that have constantly evolving requirements, conditional flows based on user input, and online wizards. Ximp.js makes implementing these easy. When your primary source of data is embedded in the HTML/DOM itself, ximp.js is what you need.
 
 Here is a typical usage example :
 
