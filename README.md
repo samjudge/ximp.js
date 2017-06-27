@@ -1,5 +1,5 @@
 # ximp.js
-Ximp.js (eXplicitly IMPerative) is a small tool used to implement logical control in your HTML tags through ximp's custom attributes. It is specifically targetted for newer developers so I can get them into bad habits early (jk). It's probably a bit (very) buggy, so make an issue (or even a test case) if you find anything!
+Ximp.js (eXplicitly IMPerative) is a small tool used to implement logical control in your HTML tags through ximp's custom attributes.
 
 The premise is simple. Ximp.js lets you use your actual HTML as your data. Your variables are now your input tags, and can be accessed via ximp's special statements.
 
