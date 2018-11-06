@@ -3,9 +3,9 @@ Ximp.js (eXplicitly IMPerative) is a small tool used to implement logical contro
 
 The premise is simple. Ximp.js lets you use your actual HTML as your data. Your variables are now your input tags, and can be accessed via ximp's special statements.
 
-It's kind of a mad experiment, but it's worked out for me in a number of sticky problems now, and more importantly, it's a fun way to program and incredibly easy and intuitive to use.
+It's hot garbage and uses not-at-all modern js. I mainly wrote it as a joke, and to "fix" crazy javascript + server side rendered code I've stumbled over.
 
-Using ximp.js means you don't need the boilerplate you would normally need to use in javascript in order to implement logical control over your HTML. Ximp.js is about getting a lot of things done on the front end, fast.
+Using ximp.js means you don't need the boilerplate you would normally need to use in javascript in order to implement logical control over your HTML. Ximp.js is about getting a lot of things done on the front end when deadlines are tight and you don't have time to learn the latest cool way of doing things in js (and you don't trust all thse new fangled words going around in the javascript eco - "compilation", "bundling", "preproccessing", bah humbug I say! setTimeout callbacks are all the asynchronous programming I'll ever need in the browser!)
 
 It allows you to easily write how your javascript interacts with your HTML. Ximp.js takes care of the "<i>how</i>" you access your HTML, leaving you to focus entirely on the "<i>what</i>" of your functions in javascript.
 
